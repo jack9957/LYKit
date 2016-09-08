@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author             = { "liyang.github.io" => "995720636@qq.com" }
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/liyang123/LYKit.git", :tag => "1.0.2" }
+  s.source       = { :git => "https://github.com/liyang123/LYKit.git", :tag => "40a2d22daaaa543a955fbb8015f9c5b2e85da878" }
   s.source_files  =  "LYKit", "LY_UIView/**/*.{h,m}", "LY_Object/**/*.{h,m}"
   s.framework  = "UIKit"
     # s.dependency "JSONKit", "~> 1.4"
