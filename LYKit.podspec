@@ -9,13 +9,13 @@
 Pod::Spec.new do |s|
 
   s.name         = "LYKit"
-  s.version      = "1.0.2"
+  s.version      = "1.1.1"
   s.summary      = "LYKit for iOS App"
   s.homepage     = "https://github.com/liyang123/LYKit.git"
   s.license      = "MIT"
   s.author             = { "liyang.github.io" => "995720636@qq.com" }
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/liyang123/LYKit.git", :tag => "699a74e3e4dad3872fa2c17ae487bf5bc1e1a840" }
+  s.source       = { :git => "https://github.com/liyang123/LYKit.git", :tag => "1.1.1" }
   s.source_files  =  "LYKit", "LY_Kit/**/*.{h,m}"
   s.framework  = "UIKit"
     # s.dependency "JSONKit", "~> 1.4"
