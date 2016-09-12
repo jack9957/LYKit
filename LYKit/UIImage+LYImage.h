@@ -95,5 +95,24 @@ typedef NS_ENUM(NSUInteger, WaterMarkLocation) {
  */
 + (instancetype)LYImageWithClipImage:(UIImage *)image;
 
+/**
+ *  裁剪图片的四个边角
+ *
+ *  @param image  要被裁剪的图片
+ *  @param corner 要被修正的尺寸大小（一般写5）
+ *
+ *  @return 裁剪图片的四个边角
+ */
++ (instancetype)LYImageWithClipImage:(UIImageView *)imageView corner:(CGFloat)corner;
+
+/**
+ *  给图片设置阴影效果
+ *
+ *  @param shadowImage 要被设置阴影的图片
+ *  @param shadowColor 阴影的颜色（一般是黑色）
+ *
+ *  @return 设置好阴影效果的图片
+ */
++ (instancetype)LYImageWithShadowImage:(UIImageView *)shadowImage;
 
 @end

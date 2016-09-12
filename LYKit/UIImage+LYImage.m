@@ -246,7 +246,7 @@
 + (instancetype)LYImageWithClipImage:(UIImage *)image
 {
     //开启上下文
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, [UIScreen mainScreen].scale);
     //画圆：正切于上下文
     UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
     //设为裁剪区域
@@ -259,5 +259,50 @@
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+/**
+ *  裁剪图片的四个边角
+ *
+ *  @param image  要被裁剪的图片
+ *  @param corner 要被修正的尺寸大小（一般写5）
+ *
+ *  @return 裁剪图片的四个边角
+ */
++ (instancetype)LYImageWithClipImage:(UIImageView *)imageView corner:(CGFloat)corner
+{
+    CALayer *layer = [CALayer layer];
+    layer.frame = imageView.bounds;
+    
+    UIBezierPath *path;
+    path = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, 0)];
+    
+    CAShapeLayer *shape = [CAShapeLayer layer];
+    shape.bounds = imageView.bounds;
+    shape.path = path.CGPath;
+    shape.position = CGPointMake(imageView.frame.size.width/2, imageView.frame.size.height/2);
+    [layer addSublayer:shape];
+    
+    imageView.layer.mask = layer;
+    
+    return imageView.image;
+}
+
+/**
+ *  给图片设置阴影效果
+ *
+ *  @param shadowImage 要被设置阴影的图片
+ *  @param shadowColor 阴影的颜色（一般是黑色）
+ *
+ *  @return 设置好阴影效果的图片
+ */
++ (instancetype)LYImageWithShadowImage:(UIImageView *)shadowImage
+{
+    shadowImage.layer.shadowColor = [UIColor blackColor].CGColor;//shadowColor阴影颜色
+    shadowImage.layer.shadowOffset = CGSizeMake(4,4);//shadowOffset阴影偏移,x向右偏移4，y向下偏移4，默认(0, -3),这个跟shadowRadius配合使用
+    shadowImage.layer.shadowOpacity = 0.6;//阴影透明度，默认0
+    shadowImage.layer.shadowRadius = 3;//阴影半径，默认3
+    
+    return shadowImage.image;
 }
 @end
