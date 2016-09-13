@@ -92,8 +92,8 @@ typedef NS_ENUM(NSUInteger, LYHttpMethod) {
  */
 + (void)getWithUrl:(NSString *)urlString
             params:(NSDictionary *)param
-           success:(LYResponseSuccess)success
           progress:(Progress)progress
+           success:(LYResponseSuccess)success
            failure:(LYResponseFail)failure;
 
 /**
@@ -107,8 +107,8 @@ typedef NS_ENUM(NSUInteger, LYHttpMethod) {
  */
 + (void)postWithUrl:(NSString *)urlString
             params:(NSDictionary *)param
-           success:(LYResponseSuccess)success
           progress:(Progress)progress
+           success:(LYResponseSuccess)success
            failure:(LYResponseFail)failure;
 
 /**
@@ -134,8 +134,22 @@ typedef NS_ENUM(NSUInteger, LYHttpMethod) {
  *  @param success    成功的回调方法
  *  @param failure    失败的回调方法
  */
-+ (void)UpLoadWithPOST:(NSString *)URLString parameters:(NSDictionary *)parameters image:(UIImage *)img  fileName:(NSString *)fileName progress:(LYUploadProgress)progress success:(LYResponseSuccess)success failure:(LYResponseFail)failure;
++ (void)UpLoadWithPOST:(NSString *)URLString parameters:(NSDictionary *)parameters image:(UIImage *)img imageName:(NSString *)imageName fileName:(NSString *)fileName progress:(LYUploadProgress)progress success:(LYResponseSuccess)success failure:(LYResponseFail)failure;
 
+/**
+ *  上传文件
+ *
+ *  @param url           上传接口
+ *  @param uploadingFile 上传文件的url路径
+ *  @param progress      上传进度
+ *  @param success       成功
+ *  @param fail          失败
+ */
++ (void)uploadFileWithUrl:(NSString *)url
+            uploadingFile:(NSString *)uploadingFile
+                 progress:(LYUploadProgress)progress
+                  success:(LYResponseSuccess)success
+                     fail:(LYResponseFail)fail;
 @end
 
 NS_ASSUME_NONNULL_END

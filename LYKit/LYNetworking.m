@@ -13,16 +13,14 @@
 @implementation LYNetworking
 
 /** 域名 */
-static NSString *ly_NetworkBaseUrl = @"http://www.baidu.com";
+static NSString *ly_NetworkBaseUrl = @"http://120.24.1.189";
 /** 接受的返回值类型 */
 static LYResponseType ly_responseType = kLYResponseTypeJSON;
 /** 网络状态 */
 static LYNetworkStatus ly_networkStatus = kLYNetworkStatusUnknow;
 /** 等待相应时间 */
 static NSTimeInterval ly_timeout = 60.0f;
-/** 是否缓存 */
-static BOOL ly_cacheGet = YES;
-static BOOL ly_cachePost = YES;
+
 
 #pragma mark - 检查此刻的网络状态
 /**
@@ -117,8 +115,8 @@ static BOOL ly_cachePost = YES;
  */
 + (void)getWithUrl:(NSString *)urlString
             params:(NSDictionary *)param
-           success:(LYResponseSuccess)success
           progress:(Progress)progress
+           success:(LYResponseSuccess)success
            failure:(LYResponseFail)failure;
 {
     [self requestWithUrl:[self ly_URLEncode:urlString] refreshCache:NO httpMedth:GET params:param success:success progress:progress fail:failure];
@@ -136,8 +134,8 @@ static BOOL ly_cachePost = YES;
  */
 + (void)postWithUrl:(NSString *)urlString
              params:(NSDictionary *)param
-            success:(LYResponseSuccess)success
            progress:(Progress)progress
+            success:(LYResponseSuccess)success
             failure:(LYResponseFail)failure
 {
     [self requestWithUrl:[self ly_URLEncode:urlString] refreshCache:NO httpMedth:POST params:param success:success progress:progress fail:failure];
@@ -224,16 +222,46 @@ static BOOL ly_cachePost = YES;
         if (success) {
             success(responseObject);
         }
-      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
             failure(error);
         }
-         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }];
     [uploadTask resume];
 }
 
+#pragma mark - 上传文件
++ (void)uploadFileWithUrl:(NSString *)url
+            uploadingFile:(NSString *)uploadingFile
+                 progress:(LYUploadProgress)progress
+                  success:(LYResponseSuccess)success
+                     fail:(LYResponseFail)fail
+{
+    AFHTTPSessionManager *manager = [self manager];
+    
+    //  开启状态栏动画
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[self ly_URLEncode:url]]];
+    
+    [manager uploadTaskWithRequest:request fromFile:[NSURL URLWithString:uploadingFile] progress:^(NSProgress * _Nonnull uploadProgress) {
+        if (progress) {
+            progress(uploadProgress.completedUnitCount, uploadProgress.totalUnitCount);
+        }
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (!error) {
+            if (fail) {
+                fail(error);
+            }
+        }else{
+            if (success) {
+                success(responseObject);
+            }
+        }
+    }];
+}
 
 #pragma mark - 私有方法
 + (AFHTTPSessionManager *)manager
@@ -297,7 +325,9 @@ static BOOL ly_cachePost = YES;
     if (httpMethod == GET) {
         [manager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
             // 下载进度
-           progress(downloadProgress.completedUnitCount, downloadProgress.totalUnitCount);
+            if (progress) {
+                progress(downloadProgress.completedUnitCount, downloadProgress.totalUnitCount);
+            }
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 成功
             success(responseObject);
